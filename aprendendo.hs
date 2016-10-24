@@ -426,7 +426,7 @@ algum [] _ = False
 algum (h:t) b | (h == b) = True
               | otherwise = algum t b
 
-algum2 :: [Bool] -> Bool--By: Eduardo Müller
+algum2 :: [Bool] -> Bool--By: Eduardo Müller  
 algum2 [] = False
 algum2 [a] = False
 algum2 (h:t) | (h /= (head t)) = True
@@ -475,3 +475,84 @@ orLAO a b = altaOrdem (||) a b where
                                  altaOrdem _ [] _ = []
                                  altaOrdem f [a] [b] = (f a b):[]
                                  altaOrdem f (h1:t1) (h2:t2) = (f h1 h2):(altaOrdem f t1 t2)
+
+
+
+                           --06/10/2016
+fet 0 = 1  --haskell identifica qual o tipo a ser usado
+fet x = x*(fet(x-1))
+
+
+                           --Avaliação tardia
+{-
+   Exemplos:
+ seja f x y = x + y
+f (1+2) (2+3) => (1+2) + (2+3) => 3 + 5 => 8
+
+ seja g x y = if (x>0) then x else y
+g (1+2) (2+3) => x = (1+2) = 3 > 0 => retorna 3, nao precisei calcular y. Poupei tempo.
+
+g 2 (div 3 0) => x = 2 > 0 => retorna 2, nao precisei calcular y que daria um erro por dividir por 0.
+
+g (g (1+2) (4+1)) (g -1 (2+3)) => precisa calcular o x do g de fora => g (1+2) (4+1) => x = (1+2) = 3 > 0 => retorna 3.
+                               g 3 (g -1 (2+3)) => x = 3 > 0 => retorna 3, nao precisei calcular o y. 
+
+-}
+
+
+-- Os argumentos de uma funcao nao sao avaliados antes da execucao da funcao.
+-- A avaliacao destes eh postergarda o maximo possivel.
+
+{-
+Vantagens:
+ Computação infinita
+  Exemplos:
+   seq x = x:(seq(x+1)) => seq 0 = [0,1,2,3,4...]
+   
+   take 2 (seq 0) => take 2 (0:seq(0+1)) => 0:(take (2-1) (seq (0+1))) => 0:(take 1 (seq (0+1)))
+                  => 0:(take 1 ((0+1):seq (0+1+1))) => 0:(0+1):(take (1-1)) (seq (0+1+1)) 
+                  => 0:(0+1):(take 0 seq (0+1+1)) => 0:(0+1):[] => 0:1:[]
+                  => [0,1]
+
+-}
+
+
+                    --07/10/2016
+
+{- Lista de exercicios de avaliação tardia
+
+a) Naturais:
+nat = 0:(sucessor nat) where
+  sucessor(h:t) = (h+1):(sucessor t)
+
+    nat = n1
+    n1 = 0:sucessor n1 = 0:n2
+    n2 = sucessor n1 = (0+1):(sucessor n2) = (1):(n3)
+    n3 = sucessor n2 = (1+1):(sucessor n3) = 2:n4
+    n4 = sucessor n3 = (2+1):(sucessor n4) = 3:n5
+
+b) Fibonacci:
+fib = 1:1:(soma fib f1) where
+  soma (h1:t1) (h2:t2) = (h1 + h2):(soma t1 t2)
+f1 = tail fib
+
+  fib = 1:1:n1
+  n1 = soma (fib (tail fib)) = soma (1:1:n1 1:n1) = (1+1):(soma 1:n1 n1) = (2):n2
+  n2 = soma(1:n1 n1) = (1 + n1):(soma 2:n2 n2) = (1 + 2:n2):soma(2:n2 n2) = (1+)
+
+-}
+
+fat = 1:(mult fat) where
+ mult = 
+
+
+
+
+
+
+
+
+
+
+
+
