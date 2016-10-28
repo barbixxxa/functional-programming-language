@@ -542,17 +542,36 @@ f1 = tail fib
 
 -}
 
-fat = 1:(mult fat) where
- mult = 
+									--28/10/2016
+data Exp = Num Int | X
+         | Soma Exp Exp
+         | Produto Exp Exp
+         | Subt Exp Exp
+         | Div Exp Exp
+         | Pot Exp Int
+         deriving Show
+--Exemplo: avalie( Soma (Num 2) (Produto (Num 3) (Num 4)))
 
+avalie :: Exp -> Int -> Int
+avalie (Num n) x = n
+avalie (Soma e1 e2) x = (avalie e1 x) + (avalie e2 x)
+avalie (Produto e1 e2) x = (avalie e1 x) * (avalie e2 x)
+avalie X x = x
 
+-- Ex2: avalie (Soma X (Num 8)) 5
 
+derivada:: Exp -> Exp --Computação simbolica
+derivada (Num n) = Num 0
+derivada X = Num 1
+derivada (Soma e1 e2) = Soma (derivada e1) (derivada e2)
 
+derivada' :: (Float -> Float) -> (Float -> Float)
+derivada' f x = (f(x+h) - f x)/h where h = 0.001
 
-
-
-
-
-
-
-
+--ex2 Soma (Pot x 2) (Produto (Num 2) X)
+--ex3 = derivada ex2
+-- h = derivada' (avalie ex2)
+-- i = avalie (derivada ex2)
+--l0 = map (avalie ex2) [1.0,1.1..10]
+--l1 = map h [1.0,1.1..10] 
+--l2 = map i [1.0,1.1..10]
