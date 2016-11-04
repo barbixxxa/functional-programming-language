@@ -543,13 +543,13 @@ f1 = tail fib
 -}
 
 									--28/10/2016
-data Exp = Num Int | X
+{-data Exp = Num Int | X
          | Soma Exp Exp
          | Produto Exp Exp
          | Subt Exp Exp
          | Div Exp Exp
          | Pot Exp Int
-         deriving Show
+         deriving (Read,Show) --deriving Read ou Show
 --Exemplo: avalie( Soma (Num 2) (Produto (Num 3) (Num 4)))
 
 avalie :: Exp -> Int -> Int
@@ -566,7 +566,7 @@ derivada X = Num 1
 derivada (Soma e1 e2) = Soma (derivada e1) (derivada e2)
 
 derivada' :: (Float -> Float) -> (Float -> Float)
-derivada' f x = (f(x+h) - f x)/h where h = 0.001
+derivada' f x = (f(x+h) - f x)/h where h = 0.001-}
 
 --ex2 Soma (Pot x 2) (Produto (Num 2) X)
 --ex3 = derivada ex2
@@ -575,3 +575,33 @@ derivada' f x = (f(x+h) - f x)/h where h = 0.001
 --l0 = map (avalie ex2) [1.0,1.1..10]
 --l1 = map h [1.0,1.1..10] 
 --l2 = map i [1.0,1.1..10]
+
+
+												--4/11/16
+
+infix 3 +/-
+(+/-) :: Float -> Float -> (Float, Float)
+x +/- y = (x+y,x-y)
+
+{-instance (Show a) => Show(Exp a) where
+	show e 
+
+class Show a where
+	show :: a -> String
+
+class Read a where
+	read :: String -> a
+-}
+infix 1 :+:
+infix 2 :*:
+data Exp a = (:+:) (Exp a) (Exp a)
+           |(:*:) (Exp a) (Exp a)
+           |Num a
+           |X deriving (Read,Show)
+
+--Soma (Produto 2 X) 3
+--(read "Produto (Num 2) (Soma X (Num 3))")::(Exp Float)
+--(read "(:*:) (Num 2) X ") :: (Exp Int)
+
+
+
